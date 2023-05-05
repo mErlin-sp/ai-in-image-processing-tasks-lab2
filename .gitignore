@@ -1,2 +1,5 @@
 /venv/
 /.idea/
+/.run/
+/output/
+*.mp4
