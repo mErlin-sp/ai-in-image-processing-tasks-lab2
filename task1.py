@@ -1,8 +1,10 @@
+import os
+
 import cv2
 
 raw_image = image = cv2.imread("friends.jpg")
 
-# resize the image to ?x800px, saving aspect ratio
+# Зменшення зображення зі збереженням відношення сторін
 h, w = image.shape[0:2]  # висота і ширина оригінального зображення
 h_new = 800  # висота нового зображення
 ratio = w / h  # відношення ширини до висоти
@@ -34,7 +36,10 @@ for (x, y, w, h) in faces:
     for (nx, ny, nw, nh) in nose:
         cv2.rectangle(roi_color, (nx, ny), (nx + nw, ny + nh), (0, 255, 255), 1)
 
-cv2.imshow("Image", image)
+os.makedirs('output', exist_ok=True)
+cv2.imwrite('output/task1-output.jpg', image)
+
+cv2.imshow("Task1", image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
@@ -46,4 +51,4 @@ resized = cv2.resize(raw_image, None, fx=scaling_factor, fy=scaling_factor, inte
 people_rects = hog.detectMultiScale(resized, winStride=(8, 8), padding=(30, 30), scale=1.06)
 for (x, y, w, h) in people_rects[0]:
     cv2.rectangle(resized, (x, y), (x + w, y + h), (0, 255, 0), 2)
-print(f'Found {len(people_rects[0])} people!')
+print(f'На фото знайдено {len(people_rects[0])} людей!')
