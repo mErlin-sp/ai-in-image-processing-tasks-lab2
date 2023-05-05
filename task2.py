@@ -1,3 +1,5 @@
+import os
+
 import cv2
 
 # Створення об'єкту захоплення відео
@@ -8,6 +10,17 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 
 # Час роботи алгоритму в секундах
 time_to_run = 30
+
+# Розмір відео
+frame_width = int(cap.get(3))
+frame_height = int(cap.get(4))
+
+# Створення директорії для запису відео
+os.makedirs('output', exist_ok=True)
+
+# Створення об'єкта запису відео
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+out = cv2.VideoWriter('output/task2-output.mp4', fourcc, 20.0, (frame_width, frame_height))
 
 # Час початку роботи алгоритму
 start_time = cv2.getTickCount()
@@ -27,8 +40,11 @@ while (cv2.getTickCount() - start_time) / cv2.getTickFrequency() < time_to_run:
     for (x, y, w, h) in faces:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
+    # Запис кадру до відео
+    out.write(frame)
+
     # Показ кадру з відображенням виділених облич
-    cv2.imshow('frame', frame)
+    cv2.imshow('Task2', frame)
 
     # Вихід з циклу при натисканні клавіші 'q'
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -36,4 +52,5 @@ while (cv2.getTickCount() - start_time) / cv2.getTickFrequency() < time_to_run:
 
 # Звільнення ресурсів
 cap.release()
+out.release()
 cv2.destroyAllWindows()
